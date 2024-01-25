@@ -1,0 +1,33 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+#Copy the 0.orig directory to a directory called 0
+restore0Dir
+
+#Create a dummy file to open the case in Paraview
+caseName=$(basename $(dirname $(readlink -f "$0")))
+touch ${caseName}.foam
+
+#Create the mesh. See and modify mesh settings in system/blockMeshDict
+runApplication blockMesh
+
+#Initialising the alpha field saying where in the domain there is water and air
+#See and change in system/setAlphaFieldDict
+runApplication setAlphaField
+
+#Initialising the velocity field to a certain value within the droplet
+#NB! If you change droplet position and radius in setAlphaFieldDict remember to
+#also change it in setFieldsDict!
+runApplication setFields
+
+#Run simulation on a single CPU (reads application in system/controlDict):
+runApplication $(getApplication)
+
+#Run on multiple CPU's (set number of CPU's in system/decomposeParDict)
+#runParallel $(getApplication)
+#runApplication decomposePar
+
+
+#------------------------------------------------------------------------------
