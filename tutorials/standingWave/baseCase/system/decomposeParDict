@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  v2206                                 |
+|  \\    /   O peration     | Version:  v2312                                 |
 |   \\  /    A nd           | Website:  www.openfoam.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -10,34 +10,17 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    object      setFieldsDict;
+    object      decomposeParDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include dropParms
+numberOfSubdomains 1;
 
-field alpha.water;
-type composedFunction;
-mode add;
-composedFunction
+method          simple;
+
+coeffs
 {
-    //Making water surface
-    plane
-    {
-        type plane;
-        origin (0 .4 0);
-        normal (0 -1 0);
-    }
-
-    //Making droplet
-    sphere
-    {
-        type sphere;
-        radius $dropRadius;
-        origin $dropCentre;
-        scale 1;
-    }
+    n           (2 1 2);
 }
-
 
 // ************************************************************************* //

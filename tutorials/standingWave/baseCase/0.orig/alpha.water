@@ -1,7 +1,7 @@
 /*--------------------------------*- C++ -*----------------------------------*\
 | =========                 |                                                 |
 | \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
-|  \\    /   O peration     | Version:  v2206                                 |
+|  \\    /   O peration     | Version:  v2312                                 |
 |   \\  /    A nd           | Website:  www.openfoam.com                      |
 |    \\/     M anipulation  |                                                 |
 \*---------------------------------------------------------------------------*/
@@ -9,32 +9,26 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    object      setFieldsDict;
+    class       volScalarField;
+    object      alpha.water;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include dropParms
+dimensions      [0 0 0 0 0 0 0];
 
-defaultFieldValues
-(
-    volVectorFieldValue U (0 0 0)
-);
+internalField   uniform 0;
 
-regions
-(
-    sphereToCell
+boundaryField
+{
+    "(left|right|top|bottom)"
     {
-        origin    $dropCentre;
-        radius    $dropRadius;
-
-        fieldValues
-        (
-            //Initial droplet velocity
-            volVectorFieldValue U (0 $dropSpeed 0)
-        );
+        type            zeroGradient;
     }
-);
 
+    "(front|back)"
+    {
+        type            empty;
+    }
+}
 
 // ************************************************************************* //

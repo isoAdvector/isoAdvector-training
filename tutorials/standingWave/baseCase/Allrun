@@ -3,15 +3,18 @@ cd "${0%/*}" || exit                                # Run from this directory
 . ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
 #------------------------------------------------------------------------------
 
-#Copy the 0.orig directory to a directory called 0
 restore0Dir
 
 #Create a dummy file to open the case in Paraview
 caseName=$(basename $(dirname $(readlink -f "$0")))
 touch ${caseName}.foam
 
-#Create the mesh
 runApplication blockMesh
+#runApplication -s 1 topoSet -dict system/topoSetDict1
+#runApplication -s 1 refineMesh -dict system/refineMeshDict1 -overwrite
 
-#Run simulation on a single core
+runApplication setAlphaField
+
 runApplication $(getApplication)
+
+#------------------------------------------------------------------------------
